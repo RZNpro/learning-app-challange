@@ -72,7 +72,7 @@ private struct MonthGrid: View {
                     Color.clear.frame(height: 44)
                 }
                 ForEach(days, id: \.self) { day in
-                    DayCircle(date: day, status: store.status(on: day))
+                    DayCircle(date: day, status: store.status(on: day), isToday: day == store.today)
                 }
             }
         }

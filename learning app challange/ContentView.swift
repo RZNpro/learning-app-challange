@@ -1,17 +1,26 @@
 import SwiftUI
-import Playgrounds
 
+/// Shows onboarding until the learner sets a first goal, then the Activity screen.
 struct ContentView: View {
+    @Environment(LearningStore.self) private var store
+
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        Group {
+            if store.goal == nil {
+                OnboardingView()
+                    .transition(.opacity)
+            } else {
+                ActivityView()
+                    .transition(.opacity)
+            }
+        }
+        .animation(.default, value: store.goal == nil)
+        .tint(.learnOrange)
+        .preferredColorScheme(.dark)
     }
 }
 
 #Preview {
     ContentView()
-}
-
-#Playground {
-    _ = 1 + 2
+        .environment(LearningStore(defaults: UserDefaults(suiteName: "preview")!))
 }

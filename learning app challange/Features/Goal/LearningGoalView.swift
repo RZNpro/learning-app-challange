@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Edits the current goal, or sets the next one once a goal has ended.
 struct LearningGoalView: View {
     @Environment(LearningStore.self) private var store
     @Environment(\.dismiss) private var dismiss
@@ -23,18 +24,20 @@ struct LearningGoalView: View {
             }
             .alert("Update goal", isPresented: $showsUpdateAlert) {
                 Button("Dismiss", role: .cancel) {}
-                Button("Update") { applyAndClose() }
+                Button("Update", action: applyAndClose)
             } message: {
                 Text("If you update now, your streak will start over.")
             }
-            .onAppear {
-                subject = store.goal?.subject ?? ""
-                period = store.goal?.period ?? .week
-            }
+            .onAppear(perform: loadCurrentGoal)
+    }
+
+    private func loadCurrentGoal() {
+        subject = store.goal?.subject ?? ""
+        period = store.goal?.period ?? .week
     }
 
     private func save() {
-        // A finished goal has no streak to lose, so there's nothing to warn about.
+        // A finished goal has no streak left to lose, so there is nothing to warn about.
         if store.outcome == .inProgress {
             showsUpdateAlert = true
         } else {
@@ -52,6 +55,5 @@ struct LearningGoalView: View {
     NavigationStack {
         LearningGoalView()
     }
-    .environment(LearningStore(defaults: UserDefaults(suiteName: "preview")!))
-    .preferredColorScheme(.dark)
+    .environment(LearningStore.preview(goal: .week))
 }

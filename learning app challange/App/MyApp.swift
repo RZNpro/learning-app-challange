@@ -5,8 +5,7 @@ import SwiftUI
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(store)
+            RootView(store: store)
                 #if DEBUG
                 .onAppear { SampleHistory.seedIfNeeded(store) }
                 #endif

@@ -2,14 +2,15 @@ import SwiftUI
 
 /// Edits the current goal, or sets the next one once a goal has ended.
 struct LearningGoalView: View {
-    @Environment(LearningStore.self) private var store
+    @State private var viewModel: LearningGoalViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var subject = ""
-    @State private var period: GoalPeriod = .week
-    @State private var showsUpdateAlert = false
+
+    init(store: LearningStore) {
+        _viewModel = State(initialValue: LearningGoalViewModel(store: store))
+    }
 
     var body: some View {
-        GoalForm(subject: $subject, period: $period)
+        GoalForm(subject: $viewModel.subject, period: $viewModel.period)
             .padding(.horizontal, 16)
             .padding(.top, 24)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -17,43 +18,25 @@ struct LearningGoalView: View {
             .inlineNavigationTitle()
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", systemImage: "checkmark", action: save)
+                    Button("Save", systemImage: "checkmark", action: viewModel.saveTapped)
                         .buttonStyle(.glassProminent)
                         .tint(.learnOrange)
                 }
             }
-            .alert("Update goal", isPresented: $showsUpdateAlert) {
+            .alert("Update goal", isPresented: $viewModel.showsUpdateAlert) {
                 Button("Dismiss", role: .cancel) {}
-                Button("Update", action: applyAndClose)
+                Button("Update", action: viewModel.confirmUpdate)
             } message: {
                 Text("If you update now, your streak will start over.")
             }
-            .onAppear(perform: loadCurrentGoal)
-    }
-
-    private func loadCurrentGoal() {
-        subject = store.goal?.subject ?? ""
-        period = store.goal?.period ?? .week
-    }
-
-    private func save() {
-        // A finished goal has no streak left to lose, so there is nothing to warn about.
-        if store.outcome == .inProgress {
-            showsUpdateAlert = true
-        } else {
-            applyAndClose()
-        }
-    }
-
-    private func applyAndClose() {
-        store.setGoal(subject: subject, period: period)
-        dismiss()
+            .onChange(of: viewModel.isFinished) { _, isFinished in
+                if isFinished { dismiss() }
+            }
     }
 }
 
 #Preview {
     NavigationStack {
-        LearningGoalView()
+        LearningGoalView(store: .preview(goal: .week))
     }
-    .environment(LearningStore.preview(goal: .week))
 }

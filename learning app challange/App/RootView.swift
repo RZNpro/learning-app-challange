@@ -2,14 +2,14 @@ import SwiftUI
 
 /// Shows onboarding exactly once — until the learner sets a first goal — then the Activity screen.
 struct RootView: View {
-    @Environment(LearningStore.self) private var store
+    let store: LearningStore
 
     var body: some View {
         Group {
             if store.hasCompletedOnboarding {
-                ActivityView()
+                ActivityView(store: store)
             } else {
-                OnboardingView()
+                OnboardingView(store: store)
             }
         }
         .transition(.opacity)
@@ -18,6 +18,5 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView()
-        .environment(LearningStore.preview())
+    RootView(store: .preview())
 }

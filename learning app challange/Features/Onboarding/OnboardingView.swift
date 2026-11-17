@@ -2,9 +2,11 @@ import SwiftUI
 
 /// First-launch screen where the learner sets their first goal.
 struct OnboardingView: View {
-    @Environment(LearningStore.self) private var store
-    @State private var subject = ""
-    @State private var period: GoalPeriod = .week
+    @State private var viewModel: OnboardingViewModel
+
+    init(store: LearningStore) {
+        _viewModel = State(initialValue: OnboardingViewModel(store: store))
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -19,7 +21,7 @@ struct OnboardingView: View {
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
 
-            GoalForm(subject: $subject, period: $period)
+            GoalForm(subject: $viewModel.subject, period: $viewModel.period)
                 .padding(.top, 31)
 
             Spacer()
@@ -42,9 +44,7 @@ struct OnboardingView: View {
 
     private var startButton: some View {
         VStack(spacing: 12) {
-            Button {
-                store.setGoal(subject: subject, period: period)
-            } label: {
+            Button(action: viewModel.startLearning) {
                 Text("Start Learning")
                     .font(.title3)
                     .padding(.horizontal, 8)
@@ -62,6 +62,5 @@ struct OnboardingView: View {
 }
 
 #Preview {
-    OnboardingView()
-        .environment(LearningStore.preview())
+    OnboardingView(store: .preview())
 }

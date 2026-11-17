@@ -1,7 +1,9 @@
 import Foundation
 import Observation
 
-/// Single source of truth for the app. Persists itself to UserDefaults as JSON.
+/// Data layer and single source of truth: holds the goal and the daily log,
+/// applies the goal rules, and persists everything to UserDefaults as JSON.
+/// ViewModels read from and write to it; Views never talk to it directly.
 @Observable
 final class LearningStore {
     private struct Snapshot: Codable {
@@ -29,7 +31,7 @@ final class LearningStore {
         }
     }
 
-    // MARK: - Today
+    // MARK: - Days
 
     var today: Date { calendar.startOfDay(for: .now) }
 
@@ -37,6 +39,11 @@ final class LearningStore {
 
     func status(on date: Date) -> DayStatus? {
         log[calendar.startOfDay(for: date)]
+    }
+
+    /// The first day anything was recorded, or today when the history is empty.
+    var earliestRecordedDay: Date {
+        (log.keys + [goal?.startDate].compactMap { $0 }).min() ?? today
     }
 
     // MARK: - Current goal
@@ -48,7 +55,10 @@ final class LearningStore {
     var freezedCount: Int { goalLog.values.count(where: { $0 == .freezed }) }
 
     var allowedFreezes: Int { goal?.period.allowedFreezes ?? 0 }
-    var canFreeze: Bool { todayStatus == nil && freezedCount < allowedFreezes }
+
+    /// Today can be switched to freezed — even after logging it as learned —
+    /// as long as it isn't freezed already and a freeze is left.
+    var canFreezeToday: Bool { todayStatus != .freezed && freezedCount < allowedFreezes }
 
     var outcome: GoalOutcome {
         guard let goal, let end = endDate(of: goal), today >= end else { return .inProgress }
@@ -73,27 +83,6 @@ final class LearningStore {
         return (yearLog.values.count(where: { $0 == .learned }), yearLog.values.count(where: { $0 == .freezed }))
     }
 
-    /// The seven days (Sunday–Saturday) of the week containing today.
-    var currentWeek: [Date] {
-        guard let week = calendar.dateInterval(of: .weekOfYear, for: today) else { return [] }
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: week.start) }
-    }
-
-    /// First day of every month from the earliest logged day through the current month.
-    var monthsWithHistory: [Date] {
-        let earliest = (log.keys + [goal?.startDate].compactMap { $0 }).min() ?? today
-        guard var month = calendar.dateInterval(of: .month, for: earliest)?.start,
-              let lastMonth = calendar.dateInterval(of: .month, for: today)?.start else { return [] }
-
-        var months: [Date] = []
-        while month <= lastMonth {
-            months.append(month)
-            guard let next = calendar.date(byAdding: .month, value: 1, to: month) else { break }
-            month = next
-        }
-        return months
-    }
-
     // MARK: - Actions
 
     /// Starts a fresh goal today. The streak starts over; past days stay in the history.
@@ -102,13 +91,15 @@ final class LearningStore {
         goal = LearningGoal(subject: trimmed.isEmpty ? "Swift" : trimmed, period: period, startDate: today)
     }
 
+    /// Logs today as learned. Replaces a freeze, which gives that freeze back.
     func logLearnedToday() {
         guard todayStatus != .learned else { return }
         log[today] = .learned
     }
 
+    /// Freezes today. Replaces a "learned" log if the learner switches their mind.
     func freezeToday() {
-        guard canFreeze else { return }
+        guard canFreezeToday else { return }
         log[today] = .freezed
     }
 

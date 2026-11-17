@@ -10,13 +10,4 @@ extension View {
         self
         #endif
     }
-
-    /// Hides the navigation bar on iOS so a screen can draw its own header.
-    func hiddenNavigationBar() -> some View {
-        #if os(iOS)
-        toolbar(.hidden, for: .navigationBar)
-        #else
-        self
-        #endif
-    }
 }

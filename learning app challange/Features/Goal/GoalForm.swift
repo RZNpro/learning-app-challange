@@ -20,31 +20,12 @@ struct GoalForm: View {
                 .font(.title3)
                 .padding(.top, 24)
                 .padding(.bottom, 12)
-            PeriodPicker(selection: $period)
-        }
-    }
-}
-
-/// Week / Month / Year pills. The selected one is filled orange.
-private struct PeriodPicker: View {
-    @Binding var selection: GoalPeriod
-
-    var body: some View {
-        HStack(spacing: 12) {
-            ForEach(GoalPeriod.allCases) { period in
-                let isSelected = period == selection
-                Button {
-                    selection = period
-                } label: {
-                    Text(period.title)
-                        .foregroundStyle(isSelected ? .white : .secondary)
-                        .frame(minWidth: 60)
-                        .padding(.vertical, 6)
+            Picker("Duration", selection: $period) {
+                ForEach(GoalPeriod.allCases) { period in
+                    Text(period.title).tag(period)
                 }
-                .buttonStyle(.glassProminent)
-                .tint(isSelected ? .learnOrange : .mutedFill)
-                .accessibilityAddTraits(isSelected ? .isSelected : [])
             }
+            .pickerStyle(.segmented)
         }
     }
 }

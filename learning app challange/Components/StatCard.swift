@@ -19,7 +19,7 @@ struct StatCard: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 100)
-        .glassEffect(.regular.tint(.cardFill), in: .rect(cornerRadius: 34))
+        .glassEffect(.regular, in: .rect(cornerRadius: 34))
     }
 }
 

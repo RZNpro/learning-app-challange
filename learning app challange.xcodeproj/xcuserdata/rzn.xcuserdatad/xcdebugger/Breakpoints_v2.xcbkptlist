@@ -18,6 +18,36 @@
             endingLineNumber = "4"
             landmarkName = "MyApp"
             landmarkType = "14">
+            <Locations>
+               <Location
+                  uuid = "830E15D8-BD7D-47B8-A65C-3FAA18BC3BEF - 530ad69c100af9da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "learning_app_challange.MyApp.init() -&gt; learning_app_challange.MyApp"
+                  moduleName = "learning app challange.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rzn/Documents/learning%20app%20challange/@__swiftmacro_22learning_app_challange5MyAppV5store33_63A00F6E8207317D9379A385A07627ADLL5StatefMp_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "6"
+                  endingLineNumber = "6">
+               </Location>
+               <Location
+                  uuid = "830E15D8-BD7D-47B8-A65C-3FAA18BC3BEF - 530ad69c100af9da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "learning_app_challange.MyApp.init() -&gt; learning_app_challange.MyApp"
+                  moduleName = "learning app challange.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rzn/Documents/learning%20app%20challange/@__swiftmacro_22learning_app_challange5MyAppV5store33_63A00F6E8207317D9379A385A07627ADLL5StatefMp_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "6"
+                  endingLineNumber = "6">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

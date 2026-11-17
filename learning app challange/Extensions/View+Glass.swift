@@ -1,9 +1,15 @@
 import SwiftUI
 
+// مجلد Extensions = إضافات على أنواع Apple الجاهزة (هنا على View).
+
 extension View {
-    /// Apple's native Liquid Glass button styles: tinted `.glassProminent` while the
-    /// button is active, regular `.glass` once it is done or unavailable.
-    /// Used instead of `.disabled`, which flattens the glass into a grey shape.
+    /// 🔷 Liquid Glass: اختار شكل الزر الزجاجي حسب حالته.
+    /// - لو الزر متاح: `.glassProminent` = زجاج ملوّن بارز (برتقالي أو سماوي).
+    /// - لو الزر خلص أو مو متاح: `.glass` = زجاج عادي رمادي، بس يبقى زجاج.
+    ///
+    /// ليش سويتها؟ لأن `.disabled` يحوّل الزجاج لشكل رمادي مسطح ويروح التأثير.
+    ///
+    /// `@ViewBuilder` = يخليني أستخدم `if/else` وأرجّع View مختلف في كل حالة.
     @ViewBuilder
     func glassButtonStyle(isProminent: Bool) -> some View {
         if isProminent {

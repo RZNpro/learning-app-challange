@@ -87,6 +87,11 @@ final class LearningStore {
 
     /// Starts a fresh goal today. The streak starts over; past days stay in the history.
     func setGoal(subject: String, period: GoalPeriod) {
+        // Replacing a goal mid-way starts over from an empty today, as the
+        // "Update goal" alert promises, so the learner logs today again.
+        if goal != nil, outcome == .inProgress {
+            log[today] = nil
+        }
         let trimmed = subject.trimmingCharacters(in: .whitespacesAndNewlines)
         goal = LearningGoal(subject: trimmed.isEmpty ? "Swift" : trimmed, period: period, startDate: today)
     }

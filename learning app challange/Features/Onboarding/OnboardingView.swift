@@ -69,12 +69,15 @@ struct OnboardingView: View {
             Button(action: viewModel.startLearning) {
                 Text("Start Learning")
                     .font(.title3)
+                    .foregroundStyle(viewModel.canStart ? Color.white : .secondary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
             }
-            // 🔷 Liquid Glass: `.glassProminent` = زر زجاجي بارز، و `.tint` يحدد لونه.
-            .buttonStyle(.glassProminent)
+            // 🔷 Liquid Glass: لو كتبت موضوع يصير زجاج برتقالي بارز (`.glassProminent`)،
+            // ولو الخانة فاضية يصير زجاج عادي رمادي (`.glass`) وما ينضغط. نفس فكرة زر Log و Freeze.
+            .glassButtonStyle(isProminent: viewModel.canStart)
             .tint(.learnOrange)
+            .allowsHitTesting(viewModel.canStart)
 
             Text("You can edit your desire later")
                 .font(.footnote)

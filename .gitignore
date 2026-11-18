@@ -1,2 +1,5 @@
 # macOS Finder metadata
 .DS_Store
+
+# Personal Xcode settings (breakpoints, open tabs, schemes) — not part of the app
+xcuserdata/

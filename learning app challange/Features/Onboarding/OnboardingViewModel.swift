@@ -21,9 +21,17 @@ final class OnboardingViewModel {
         self.store = store
     }
 
+    /// هل أقدر أضغط "Start Learning"؟ بس لو كتبت موضوع (متطلب التحدي: Start Learning requires a topic).
+    /// `trimmingCharacters` يشيل المسافات، عشان لو كتبت مسافات بس ما تنحسب موضوع.
+    /// حطيت الشرط هنا في الـ ViewModel مو في الـ View، لأنه منطق، والـ View بس تعرض.
+    var canStart: Bool {
+        !subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
     /// لما أضغط "Start Learning": أحفظ الهدف في المخزن.
     /// وبعدها الـ RootView يلاحظ إن صار فيه هدف، فينقلني لشاشة Activity لحاله.
     func startLearning() {
+        guard canStart else { return }   // حماية زيادة: بدون موضوع لا تسوي شي
         store.setGoal(subject: subject, period: period)
     }
 }

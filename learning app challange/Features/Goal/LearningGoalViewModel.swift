@@ -24,8 +24,14 @@ final class LearningGoalViewModel {
         period = store.goal?.period ?? .week
     }
 
+    /// زر ✓ يشتغل بس لو فيه موضوع، نفس شرط "Start Learning" في الـ Onboarding.
+    var canSave: Bool {
+        !subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
     /// لما أضغط زر ✓ (Save).
     func saveTapped() {
+        guard canSave else { return }
         // لو الهدف لسا شغال، أحذّر المستخدم إن الستريك بيتصفّر.
         // ولو الهدف خلص أصلاً ما فيه شي يضيع، فأحفظ على طول بدون تنبيه.
         if store.outcome == .inProgress {

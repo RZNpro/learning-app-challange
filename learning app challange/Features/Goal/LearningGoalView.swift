@@ -27,6 +27,8 @@ struct LearningGoalView: View {
                     Button("Save", systemImage: "checkmark", action: viewModel.saveTapped)
                         .buttonStyle(.glassProminent)   // 🔷 زر زجاجي برتقالي بارز
                         .tint(.learnOrange)
+                        // لو مسحت الموضوع، يتعطل الزر. في شريط الأدوات `.disabled` يبان طبيعي ويخليه باهت.
+                        .disabled(!viewModel.canSave)
                 }
             }
             // 🔷 Native: `.alert` تنبيه Apple الأصلي.

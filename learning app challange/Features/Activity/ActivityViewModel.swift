@@ -72,8 +72,6 @@ final class ActivityViewModel {
 
     // MARK: - اليوم
 
-    var isGoalInProgress: Bool { store.outcome == .inProgress }
-
     // زر Log: يكون متاح إلا إذا سجلت اليوم Learned أصلاً.
     var canLogLearned: Bool { store.todayStatus != .learned }
     // النص يتغيّر حسب الحالة. سويته هنا مو في الـ View، لأن هذا "منطق عرض" ومكانه الـ ViewModel.

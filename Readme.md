@@ -23,6 +23,7 @@ Learning Journey helps you build a daily learning habit. Set what you want to le
 <p align="center">
   <img src="Screenshots/screens.jpg" alt="Onboarding, Activity and Calendar screens">
 </p>
+
 ## Technologies
 
 - **Swift & SwiftUI**

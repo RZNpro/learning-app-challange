@@ -1,6 +1,7 @@
 <p align="center">
   <img src="Screenshots/header.jpg" alt="Learning Journey">
 </p>
+
 ## Learning Journey 🔥
 
 Learning Journey helps you build a daily learning habit. Set what you want to learn and for how long, then log each day as learned — or freeze it when you need a break — and watch your streak grow.
